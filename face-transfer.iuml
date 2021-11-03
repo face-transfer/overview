@@ -1,0 +1,43 @@
+@startuml
+
+rectangle "Face transfer system" {
+
+    card "pulumi application" {
+     rectangle "cloud-setup" as aws_setup
+    }
+    
+    cloud AWS{
+    
+    frame "sagemaker" {
+     rectangle "model-generator" as generator
+    }
+    
+    frame "serverless function" as s_executor {
+        rectangle "model-executor" as executor
+    }
+    
+    frame "serverless function" as s_preprocessor  {
+      rectangle "image-preprocessor" as preprocessor
+    }
+     
+     frame "serverless function" as s_uploader {
+       rectangle "image-uploader" as uploader
+    }
+     database S3 as s3
+    
+    uploader  -->  s3
+    generator <-- s3
+    generator --> s3
+    executor --> s3
+    executor <-- s3
+    preprocessor --> s3 
+    preprocessor <-- s3
+    
+    }
+    
+    aws_setup --> AWS
+
+}
+
+
+@enduml
